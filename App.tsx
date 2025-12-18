@@ -6,14 +6,14 @@ import {
   Trash2, Edit2, ChevronRight, LayoutDashboard,
   BrainCircuit, Loader2, Menu, X, Save
 } from 'lucide-react';
-// Correctly import auth functions from 'firebase/auth' using standard named exports
+// Fix: Correctly import modular Firebase Auth functions and User type in a single block to resolve missing export errors
 import { 
   onAuthStateChanged, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
-  signOut
+  signOut,
+  User
 } from 'firebase/auth';
-import type { User } from 'firebase/auth';
 import { 
   collection, query, where, onSnapshot, 
   addDoc, deleteDoc, doc, updateDoc,
