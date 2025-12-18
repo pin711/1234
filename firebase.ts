@@ -1,14 +1,11 @@
 
-import { initializeApp, getApps } from 'firebase/app';
-import type { FirebaseApp } from 'firebase/app';
-// Fix: Consolidate modular Firebase Auth imports to ensure all members are recognized
+import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
+// Consolidate getAuth and Auth type into a single import statement to ensure proper module resolution
 import { getAuth, Auth } from 'firebase/auth';
-// Fix: Consolidate modular Firebase Firestore imports
 import { getFirestore, Firestore } from 'firebase/firestore';
 
 /**
  * [重要] 硬編碼 Firebase 設定
- * 請確保此變數在任何邏輯調用前已正確定義
  */
 const hardcodedFirebaseConfig = {
   apiKey: "AIzaSyD6RP5acBTKR9o4lqt3SVmSudmJhRD5hzw",
@@ -19,25 +16,19 @@ const hardcodedFirebaseConfig = {
   appId: "1:286922871756:web:b94622a9c4842442220369"
 };
 
-let configToUse: any = null;
-
-try {
-  // 優先檢查是否有從 Secrets 注入的環境變數
-  const envConfig = process.env.FIREBASE_CONFIG;
-  
-  if (envConfig && envConfig !== '{}' && envConfig !== '""') {
-    configToUse = JSON.parse(envConfig);
-  } else {
-    // 若無環境變數，檢查硬編碼設定是否有效
-    if (hardcodedFirebaseConfig.apiKey && hardcodedFirebaseConfig.apiKey !== "YOUR_FIREBASE_API_KEY") {
-      configToUse = hardcodedFirebaseConfig;
+const getEffectiveConfig = () => {
+  try {
+    const envConfig = process.env.FIREBASE_CONFIG;
+    if (envConfig && envConfig !== '{}' && envConfig !== '""') {
+      return JSON.parse(envConfig);
     }
+  } catch (e) {
+    console.error("Firebase config parsing from environment failed:", e);
   }
-} catch (e) {
-  console.error("Firebase config parsing failed, falling back to default:", e);
-  configToUse = hardcodedFirebaseConfig;
-}
+  return hardcodedFirebaseConfig;
+};
 
+const configToUse = getEffectiveConfig();
 const isConfigValid = !!(configToUse && configToUse.apiKey && configToUse.apiKey !== "YOUR_FIREBASE_API_KEY");
 
 const app: FirebaseApp | null = isConfigValid 
