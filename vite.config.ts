@@ -4,18 +4,16 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: './', // 確保 GitHub Pages 子目錄路徑正確
+  base: './', // 關鍵：確保 GitHub Pages 子目錄路徑正確，防止白色畫面
   define: {
     'process.env.API_KEY': JSON.stringify(process.env.API_KEY || ''),
     'process.env.FIREBASE_CONFIG': JSON.stringify(process.env.FIREBASE_CONFIG || '{}'),
   },
+  // Use esbuild for faster builds and built-in console removal which is more reliable in Vite
+  esbuild: {
+    drop: ['console', 'debugger'],
+  },
   build: {
-    minify: 'terser', // 使用 terser 確保生產環境編譯成功且代碼最小化
-    terserOptions: {
-      compress: {
-        drop_console: true, // 生產環境移除 console
-      },
-    },
     rollupOptions: {
       output: {
         manualChunks: {

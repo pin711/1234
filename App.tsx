@@ -6,14 +6,14 @@ import {
   Trash2, Edit2, ChevronRight, LayoutDashboard,
   BrainCircuit, Loader2, Menu, X, Save
 } from 'lucide-react';
-// Fix: Consolidate Firebase Auth imports and use 'type' keyword for User to ensure compatibility with TS module resolution
+// Fix: Use separate import for types and values from firebase/auth to ensure proper module resolution
 import { 
   onAuthStateChanged, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
-  signOut,
-  type User
+  signOut
 } from 'firebase/auth';
+import type { User } from 'firebase/auth';
 import { 
   collection, query, where, onSnapshot, 
   addDoc, deleteDoc, doc, updateDoc,
@@ -75,7 +75,7 @@ export default function App() {
       return;
     }
     const unsubscribe = onAuthStateChanged(auth, (u) => {
-      setUser(u);
+      setUser(u as User | null);
       setLoading(false);
     });
     return () => unsubscribe();
