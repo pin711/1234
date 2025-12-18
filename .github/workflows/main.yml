@@ -22,7 +22,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          # 移除 cache 選項以避免在缺少 package-lock.json 時報錯
+          # 如果您本地有 package-lock.json 並已上傳，可以加回 cache: 'npm'
 
       - name: Install dependencies
         run: npm install
@@ -31,7 +32,6 @@ jobs:
         run: npm run build
         env:
           API_KEY: ${{ secrets.API_KEY }}
-          # 這裡我們保留注入接口，但 firebase.ts 內會優先使用硬編碼設定以利開發
           FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
 
       - name: Upload artifact
