@@ -1,0 +1,5 @@
+{
+  "name": "FinTrack AI - 個人化金融財務管理系統",
+  "description": "結合 Gemini AI 建議的個人化財務追蹤工具，支持多銀行帳戶管理、收支分類與視覺化報表。",
+  "requestFramePermissions": []
+}
